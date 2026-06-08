@@ -15,9 +15,6 @@ DATABASE = os.getenv("DATABASE")
 SCHEMA = os.getenv("SCHEMA")
 TABLE_NAME = os.getenv("TABLE_NAME")
 
-# -----------------------------
-# CONNECT TO SNOWFLAKE
-# -----------------------------
 conn = snowflake.connector.connect(
     user=USER,
     password=PASSWORD,

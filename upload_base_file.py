@@ -18,17 +18,13 @@ DATABASE = os.getenv("DATABASE")
 SCHEMA = os.getenv("SCHEMA")
 TABLE_NAME = os.getenv("TABLE_NAME")
 
-# -----------------------------
-# 3) READ CSV INTO PANDAS
-# -----------------------------
+
 df = pd.read_csv(CSV_FILE_PATH)
 
 # Optional: make column names Snowflake-friendly
 df.columns = [col.replace(" ", "_") for col in df.columns]
 
-# -----------------------------
-# 4) CONNECT TO SNOWFLAKE
-# -----------------------------
+
 conn = snowflake.connector.connect(
     user=USER,
     password=PASSWORD,
@@ -38,16 +34,12 @@ conn = snowflake.connector.connect(
 cur = conn.cursor()
 
 try:
-    # -----------------------------
-    # 5) SET CONTEXT
-    # -----------------------------
+    
     cur.execute(f'USE WAREHOUSE "{WAREHOUSE}"')
     cur.execute(f'USE DATABASE "{DATABASE}"')
     cur.execute(f'USE SCHEMA "{SCHEMA}"')
 
-    # -----------------------------
-    # 6) AUTO CREATE TABLE BASED ON DATAFRAME
-    # -----------------------------
+    
     col_defs = []
     for col, dtype in df.dtypes.items():
         if "int" in str(dtype):
@@ -64,18 +56,13 @@ try:
     '''
     cur.execute(create_table_sql)
 
-    # -----------------------------
-    # 7) UPLOAD DATAFRAME TO SNOWFLAKE
-    # -----------------------------
     success, nchunks, nrows, _ = write_pandas(conn, df, TABLE_NAME)
 
     print("Upload Success:", success)
     print("Chunks Uploaded:", nchunks)
     print("Rows Inserted:", nrows)
 
-    # -----------------------------
-    # 8) VERIFY DATA
-    # -----------------------------
+    
     cur.execute(f'SELECT COUNT(*) FROM "{TABLE_NAME}"')
     print("Total Rows in Table:", cur.fetchone()[0])
 

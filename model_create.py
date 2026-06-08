@@ -19,13 +19,15 @@ def main(data):
     df["HasMortgage"] = np.where(df["HasMortgage"] == "Yes", 1, 0)
     df["HasDependents"] = np.where(df["HasDependents"] == "Yes", 1, 0)
 
-    df["Education"] = np.where(df["Education"] == "High School", 1,
-                        np.where(df["Education"] == "Bachelor's", 2,
-                        np.where(df["Education"] == "Master's", 3, 4)))
+    # df["Education"] = np.where(df["Education"] == "High School", 1,
+    #                     np.where(df["Education"] == "Bachelor's", 2,
+    #                     np.where(df["Education"] == "Master's", 3, 4)))
 
-    df["EmploymentType"] = np.where(df["EmploymentType"] == "Full-time", 1,
-                        np.where(df["EmploymentType"] == "Part-time", 2,
-                        np.where(df["EmploymentType"] == "Self-employed", 3, 4)))
+    # df["EmploymentType"] = np.where(df["EmploymentType"] == "Full-time", 1,
+    #                     np.where(df["EmploymentType"] == "Part-time", 2,
+    #                     np.where(df["EmploymentType"] == "Self-employed", 3, 4)))
+
+    df = pd.get_dummies(df, columns=["Education", "EmploymentType"],drop_first=True)
 
     X = df.drop(columns=["Default"])
     y = df["Default"]

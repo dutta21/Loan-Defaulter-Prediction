@@ -26,13 +26,15 @@ new_df = pd.DataFrame([{
 new_df["HasMortgage"] = np.where(new_df["HasMortgage"] == "Yes", 1, 0)
 new_df["HasDependents"] = np.where(new_df["HasDependents"] == "Yes", 1, 0)
 
-new_df["Education"] = np.where(new_df["Education"] == "High School", 1,
-                        np.where(new_df["Education"] == "Bachelor's", 2,
-                        np.where(new_df["Education"] == "Master's", 3, 4)))
+# new_df["Education"] = np.where(new_df["Education"] == "High School", 1,
+#                         np.where(new_df["Education"] == "Bachelor's", 2,
+#                         np.where(new_df["Education"] == "Master's", 3, 4)))
 
-new_df["EmploymentType"] = np.where(new_df["EmploymentType"] == "Full-time", 1,
-                        np.where(new_df["EmploymentType"] == "Part-time", 2,
-                        np.where(new_df["EmploymentType"] == "Self-employed", 3, 4)))
+# new_df["EmploymentType"] = np.where(new_df["EmploymentType"] == "Full-time", 1,
+#                         np.where(new_df["EmploymentType"] == "Part-time", 2,
+#                         np.where(new_df["EmploymentType"] == "Self-employed", 3, 4)))
+
+new_df = pd.get_dummies(new_df,columns=["Education", "EmploymentType"],drop_first=True)
 
 # Ensure correct column order
 new_df = new_df.reindex(columns=feature_cols)

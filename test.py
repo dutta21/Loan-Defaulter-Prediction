@@ -16,10 +16,10 @@ new_df = pd.DataFrame([{
     "InterestRate": 12.5,
     "LoanTerm": 36,
     "DTIRatio": 0.32,
-    "Education": 2,          # Bachelor's
-    "EmploymentType": 1,     # Full-time
-    "HasMortgage": 1,        # Yes
-    "HasDependents": 0       # No
+    "Education": "High School",          # Bachelor's
+    "EmploymentType": "Full-time",     # Full-time
+    "HasMortgage": "Yes",        # Yes
+    "HasDependents": "No"       # No
 }])
 
 # Apply SAME preprocessing
@@ -37,7 +37,7 @@ new_df["HasDependents"] = np.where(new_df["HasDependents"] == "Yes", 1, 0)
 new_df = pd.get_dummies(new_df,columns=["Education", "EmploymentType"],drop_first=True)
 
 # Ensure correct column order
-new_df = new_df.reindex(columns=feature_cols)
+new_df = new_df.reindex(columns=feature_cols,fill_value=0)
 
 # Scale new data
 new_scaled = scaler.transform(new_df)
@@ -50,3 +50,9 @@ new_df["Prediction_Default"] = pred
 new_df["Probability_Default"] = prob
 
 print(new_df)
+if prob[0] > 0.7:
+    print("High Risk Customer")
+elif prob[0] > 0.4:
+    print("Medium Risk Customer")
+else:
+    print("Low Risk Customer")
